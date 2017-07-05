@@ -1,0 +1,33 @@
+<head>
+  <title>Light node servers</title>
+</head>
+<body>
+  <p>Latest iri release: <span id="latestVersion"></span> (updated at: <span id="latestVersionTime"></span>)</p>
+  <table id="providers">
+    <td>URL</td>
+    <td>Version</td>
+    <td>Latest solid milestone</td>
+    <td>Response time</td>
+    <td>Updated at</td>
+  </table>
+  <script>
+    fetch('providers-full.json').then((res) => {
+      return res.json()
+    }).then((json) => {
+      document.getElementById("latestVersion").innerHTML = json.versionInfo.version;
+      document.getElementById("latestVersionTime").innerHTML = new Date(json.versionInfo.timestamp);
+
+      var providersTableEl = document.getElementById("providers");
+      console.log(json)
+      json.providers.forEach((p) => {
+        var proot = document.createElement('tr');
+        proot.innerHTML += "<td>" + p.uri + "</td>"
+        proot.innerHTML += "<td>" + p.nodeInfo.appVersion + "</td>"
+        proot.innerHTML += "<td>" + p.nodeInfo.latestSolidSubtangleMilestoneIndex + "</td>"
+        proot.innerHTML += "<td>" + p.responseTime + "</td>"
+        proot.innerHTML += "<td>" + new Date(p.timestamp) + "</td>"
+        providersTableEl.appendChild(proot)
+      })
+    })
+  </script>
+</body>
